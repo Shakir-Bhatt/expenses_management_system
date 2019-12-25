@@ -8,3 +8,7 @@ Using this app you can manage your daily expenses and have clean overview of dat
 ![Alt text](assets/Item-detail-1.png?raw=true "Expenses detail")
 # View Item detail for all users
 ![Alt text](assets/Item-detail-2.png?raw=true "Expenses detail")
+# Setterment screen
+![Alt text](assets/Setterment-Screen.png?raw=true "Expenses Settelment")
+
+
