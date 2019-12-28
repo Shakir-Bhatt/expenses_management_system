@@ -13,6 +13,8 @@ if($requestType == "expenses"){
     transction();
 } elseif ($requestType == "transctionmodalbody") {
     getTransctionModalbody();
+} elseif ($requestType == "makepayment"){
+    makePayment();
 }
 
 	
@@ -97,9 +99,11 @@ function showExpensesTable(){
                         $itemPriceTags .= '<span class="badge badge-info">'.$itemPrice.'</span>&nbsp;';
                     endforeach;
                     $totalPrice = $item['total_price'];
-                    $createdAt = date_format(new DateTime($item['created_at']), 'Y-m-d');
-                    $updatedAt = date_format(new DateTime($item['updated_at']), 'Y-m-d');
-                    $action = 'action';
+                    // $createdAt = date_format(new DateTime($item['created_at']), 'Y-m-d');
+                    // $updatedAt = date_format(new DateTime($item['updated_at']), 'Y-m-d');
+                    // $action = 'action';
+                    $createdAt = $item['created_at'];
+                    $updatedAt = $item['updated_at'];
 
                 $finalArray['data'][] = array( $userName, $itemPriceTags, $totalPrice, $createdAt,$updatedAt,$action);
                 }
@@ -160,7 +164,6 @@ function transction(){
 }
 
 function getTransctionModalbody(){
-    // debug($_GET,1);
     $userId = $_GET['user_id'];
     $currentMonth = Date('Y-m');
 
@@ -182,22 +185,24 @@ function getTransctionModalbody(){
             }    
         }
 
-        $html ='<div class="row">
-            <label class="form-check-label col-sm-12 col-md-12 bold">Payable Amount : <span id="payable-amount" class="badge badge-info">'.ltrim($payableAmount,'-').'</span> </label>
+        $html ='<div class="row">';
+        $html .='<div class="col-sm-12 col-md-12 toast toast-error hide" data-autohide="false" style="max-width: 100%;background: #ca2d22d4;color: #ffffff;">
+                        <div class="toast-body" style="text-align: center !important;">
+                            <span> </span>
+                        </div>
+                    </div>';
+        $html .=' <label class="form-check-label col-sm-12 col-md-12 bold">Payable Amount : <span id="payable-amount" class="badge badge-info">'.ltrim($payableAmount,'-').'</span> </label>
             </div><br>';
+        $html .= '<input type="hidden" name="payeeId" value="'.$userId.'">';
+
 
         foreach ($result as $key => $value){
             $creditOrDebit = ((float)$value['total_spent'] - $average );
             if($creditOrDebit > 0){
                 $html .='<div class="col-md-12 col-sm-12 form-group">';
-                $html .='<div class="toast toast-error hide" data-autohide="false" style="max-width: 100%;background: #ca2d22d4;color: #ffffff;">
-                        <div class="toast-body" style="text-align: center !important;">
-                            <span> </span>
-                        </div>
-                    </div>';
                 $html .='<div class="row">
                             <label class="form-check-label col-sm-4 col-md-4">
-                                &nbsp;<input class="form-check-input" type="checkbox" name="user_id_'.$value['id'].'" onchange="enableDisableField(this);"> '.$value['first_name'].'
+                                &nbsp;<input class="form-check-input" type="checkbox" name="user_id[]" onchange="enableDisableField(this);" value="'.$value['id'].'"> '.$value['first_name'].'
                             </label>
                             <label class="badge badge-info amount-to-pay-to-each" style="line-height:2 !important;">'.$creditOrDebit.'</label>&nbsp;&nbsp;
                             <input type="number" name="amount[]" class="form-control col-sm-5 col-md-5 amount-paid" value=""; onkeyup="checkPayablePrice(this);" disabled="true" placeholder="Select user to pay">
@@ -217,7 +222,10 @@ function getTransctionModalbody(){
         http_response_code(422);
         echo json_encode("Some error occured. Please try later");
     } 
+} 
 
-}            
+function makePayment(){
+    
+}           
 
 ?>

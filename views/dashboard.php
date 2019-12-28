@@ -55,13 +55,15 @@
 
         <!-- Modal body -->
         <div class="modal-body text-center">
+          <form id="transaction-form">
             <!--  Updated by ajax -->
+          </form>
         </div>
 
         <!-- Modal footer -->
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" onclick="payAmount(this);">Save</button>
+            <button type="button" class="btn btn-success" onclick="payAmount(this,'#transaction-form');">Save</button>
         </div>
 
     </div>

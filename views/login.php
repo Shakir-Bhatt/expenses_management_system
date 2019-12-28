@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Mess</title>
+        <title>Expenses</title>
         <script src="../assets/jquery.min.js"></script>
         <link rel="stylesheet" href="../assets/bootstrap.min.css">
         <script src="../assets/popper.min.js"></script>

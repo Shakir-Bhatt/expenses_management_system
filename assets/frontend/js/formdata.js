@@ -124,3 +124,91 @@ function saveData(btnObj){
         } 
     });
 }
+
+var loader = '<div class="spinner-border"></div>';
+$('#transactionModal').on('show.bs.modal', function (event) {
+    $('#transactionModal .modal-body form').html(loader);
+    var button = $(event.relatedTarget); 
+    var userId = button.data('user'); 
+    $.ajax({
+        method: "GET",
+        dataType: "json",
+        data:{user_id:userId},
+        url: "controllers/dashboard.php?action=transctionmodalbody",
+        success: function (response) {
+            $('#transactionModal .modal-body form').html(response);
+        },
+        error: function (response) {
+            showErrorToaster(response.responseJSON);
+            if(response.status == 419 || response.status == 401){
+                window.location.href = window.location.href
+            }
+            
+        }
+    });
+});
+
+function enableDisableField(obj) {
+
+    if($(obj).parent().next().next().prop('disabled')){
+        $(obj).parent().next().next().prop('disabled',false);
+    } else {
+        $(obj).parent().next().next().prop('disabled',true);
+    }
+}
+function checkPayablePrice(obj) {
+    var totalAmountToPay = parseFloat($('#payable-amount').text());
+    var amountToPayToUser = parseFloat($(obj).prev().text());
+    var currentAmount = parseFloat($(obj).val());
+    if( currentAmount > amountToPayToUser || currentAmount > totalAmountToPay){
+        var message = 'Amount cannot be greater than payable amount or amount to paid user';
+        showErrorToaster(message);
+        $(obj).val(0);
+    }
+
+}
+
+function payAmount(btnObj,formId) {
+    var totalAmountToPay = parseFloat($('#payable-amount').text());
+    //console.log(totalAmountToPay);
+    var amountToPayToEach = 0.00;
+    $(".amount-to-pay-to-each").each(function() {
+        amountToPayToEach += parseFloat($(this).text());
+    });
+    //console.log(amountToPayToEach);
+
+    var amountPaid = 0.00;
+    $(".amount-paid").each(function() {
+        if(!$(this).prop('disabled')){
+            amountPaid += parseFloat($(this).val());
+        }
+    });
+    //console.log(amountPaid);
+
+    if(amountPaid > totalAmountToPay){
+        var message = 'Paid amount cannot be greater than Payable Amount';
+        showErrorToaster(message);
+        // Set 0 to all input fields
+        $(".amount-paid").each(function() {
+            $(this).val(0);
+        });
+    }
+
+    var formData = $(formId).serialize();
+    $.ajax({
+        method: "GET",
+        dataType: "json",
+        data:{user_id:userId},
+        url: "controllers/dashboard.php?action=makepayment",
+        success: function (response) {
+            showErrorToaster(response);
+        },
+        error: function (response) {
+            showErrorToaster(response.responseJSON);
+            if(response.status == 419 || response.status == 401){
+                window.location.href= window.location.href
+            }
+            
+        }
+    });
+} 
