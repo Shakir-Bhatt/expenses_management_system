@@ -190,7 +190,12 @@ function getTransctionModalbody(){
                         <div class="toast-body" style="text-align: center !important;">
                             <span> </span>
                         </div>
-                    </div>';
+                    </div>
+                <div class="col-sm-12 col-md-12 toast toast-success hide" data-autohide="false" style="max-width: 100%;background: #ca2d22d4;color: #ffffff;">
+                    <div class="toast-body" style="text-align: center !important;">
+                        <span> </span>
+                    </div>
+                </div>';
         $html .=' <label class="form-check-label col-sm-12 col-md-12 bold">Payable Amount : <span id="payable-amount" class="badge badge-info">'.ltrim($payableAmount,'-').'</span> </label>
             </div><br>';
         $html .= '<input type="hidden" name="payeeId" value="'.$userId.'">';
@@ -225,7 +230,9 @@ function getTransctionModalbody(){
 } 
 
 function makePayment(){
-    
+    parse_str($_POST['form_data'],$formData);
+    debug($formData);
+
 }           
 
 ?>

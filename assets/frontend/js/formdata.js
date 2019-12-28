@@ -170,12 +170,10 @@ function checkPayablePrice(obj) {
 
 function payAmount(btnObj,formId) {
     var totalAmountToPay = parseFloat($('#payable-amount').text());
-    //console.log(totalAmountToPay);
     var amountToPayToEach = 0.00;
     $(".amount-to-pay-to-each").each(function() {
         amountToPayToEach += parseFloat($(this).text());
     });
-    //console.log(amountToPayToEach);
 
     var amountPaid = 0.00;
     $(".amount-paid").each(function() {
@@ -183,12 +181,11 @@ function payAmount(btnObj,formId) {
             amountPaid += parseFloat($(this).val());
         }
     });
-    //console.log(amountPaid);
 
     if(amountPaid > totalAmountToPay){
         var message = 'Paid amount cannot be greater than Payable Amount';
         showErrorToaster(message);
-        // Set 0 to all input fields
+        // Set 0's to all input fields
         $(".amount-paid").each(function() {
             $(this).val(0);
         });
@@ -196,9 +193,9 @@ function payAmount(btnObj,formId) {
 
     var formData = $(formId).serialize();
     $.ajax({
-        method: "GET",
+        method: "POST",
         dataType: "json",
-        data:{user_id:userId},
+        data:{form_data:formData},
         url: "controllers/dashboard.php?action=makepayment",
         success: function (response) {
             showErrorToaster(response);
